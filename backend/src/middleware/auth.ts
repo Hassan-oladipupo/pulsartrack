@@ -155,7 +155,7 @@ export function rateLimit() {
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
-    const ip = req.ip || req.connection.remoteAddress || "unknown";
+    const ip = req.ip || "unknown";
 
     try {
       await ipLimiter.consume(ip);

@@ -21,6 +21,12 @@ import redisClient from "./config/redis";
 const app = express();
 const PORT = parseInt(process.env.PORT || "4000", 10);
 
+// Trust proxy when behind reverse proxy/load balancer (nginx, Cloudflare, AWS ALB)
+// This ensures req.ip returns the real client IP from X-Forwarded-For header
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1); // Trust first proxy
+}
+
 // Initialize Redis-backed rate limiters
 configureRateLimiters(redisClient);
 
