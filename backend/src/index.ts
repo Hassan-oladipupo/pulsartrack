@@ -15,6 +15,7 @@ import {
 } from "./middleware/auth";
 import { setupWebSocketServer } from "./services/websocket-server";
 import { checkDbConnection } from "./config/database";
+import { validateContractIds } from "./config/stellar";
 import prisma from "./db/prisma";
 import redisClient from "./config/redis";
 
@@ -69,6 +70,9 @@ setupWebSocketServer(server);
 
 // Start server
 async function start() {
+  // Validate contract IDs — throws in production, warns in development
+  validateContractIds();
+
   // Verify database connection — fail hard in production
   const dbOk = await checkDbConnection();
   if (!dbOk) {
